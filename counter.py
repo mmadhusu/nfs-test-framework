@@ -20,7 +20,17 @@ def counter(count):
 	fo.close()
 	return num;
 
+def reset():
+	fo = open('/tmp/counter.txt','w')
+	fo.write("0")
+	fo.close()
+        
 
-
+def get_value():
+	fo =open('/tmp/counter.txt','r')
+	str1=fo.read()
+	fo.close()
+	num=int(str1)
+	return num;
 	
 	

@@ -2,9 +2,10 @@
 import os,sys,subprocess
 from subprocess import call
 from counter import counter
+from logger import logger 
 count=0
-server_ip=sys.argv[1]
-log_file=sys.argv[2]
+server_ip=sys.argv[2]
+log_file=sys.argv[1]
 logfile='/tmp/perftest.txt'
 
 class  Logger(object):
@@ -15,7 +16,8 @@ class  Logger(object):
                 self.terminal.write(message)
                 self.log.write(message)
 
-sys.stdout = Logger()
+#sys.stdout = Logger()
+#logger(log_file)
 
 def compare(search_str):
         global count
@@ -32,7 +34,8 @@ def compare(search_str):
 		#print count
 
         search_file.close()
-sys.stdout=Logger()
+#sys.stdout=Logger()
+logger(log_file)
 
 
 print "==============================TEST 5 BEGINS============================="

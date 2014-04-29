@@ -2,6 +2,7 @@
 import os,sys
 from success import success
 from counter import  counter
+from logger import logger
 
 count =0
 log_file=sys.argv[1]
@@ -15,7 +16,8 @@ class  Logger(object):
                 self.log.write(message)
 
 
-sys.stdout= Logger()
+#sys.stdout= Logger()
+logger(log_file)
 print "==============================TEST 2 BEGINS============================="
 
 #Unit test1: Creating files on the mountpoint;
@@ -97,7 +99,12 @@ test2_1()
 test2_2()
 test2_3()
 test2_4()
-counter(count)
+
+if count == 4:
+        print "TEST 2 : PASS"
+        counter(1)
+else:
+        print "Test 2 : FAILURE"
 
 print "==============================TEST 2 ENDS==============================="
 

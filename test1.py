@@ -4,6 +4,7 @@ from success import success
 import os
 import shutil
 from counter import counter
+from logger import logger
 
 
 log_file = sys.argv[1]
@@ -18,7 +19,8 @@ class  Logger(object):
                 self.terminal.write(message)
                 self.log.write(message)
 
-sys.stdout = Logger()
+#sys.stdout = Logger()
+logger(log_file)
 
 #First testcase : Directory based tests
 
@@ -112,6 +114,11 @@ test1_1()
 test1_2()
 test1_3()
 test1_4()
-counter(count)
+
+if count == 4:
+        print "TEST 1 : PASS"
+        counter(1)
+else:
+        print "Test 1 : FAILURE"
 print "==============================TEST 1 ENDS=============================="
 

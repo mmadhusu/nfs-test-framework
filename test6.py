@@ -1,24 +1,13 @@
 #!/usr/bin/python
-import os
 from subprocess import call
+from logger import logger
+import sys
+log_file=sys.argv[1]
 
-
-if os.path.isdir('/opt') == False:
-	os.mkdir('/opt')
-print "==============================TEST 6 BEGINS============================="
-#=========Running tests run by QA================#
+logger(log_file)
 call('./run-qa.sh',shell=True)
-f = open('/export/tests_failed','r')
-print f.read()
-f.close()
-if '21' in open('/export/tests_failed').read():
-	print "TEST 5 : PASS"
-	#counter(1)
-else:
-	print "TEST 5 : FAIL"
-
-print "==============================TEST 6 ENDS==============================="
-
-
-
+print "=============================TEST 6 BEGINS============================="
+call('time /opt/qa/tools/system_light/run.sh -w /mnt/ganesha-mnt -l /export/arequal.log -t arequal',shell=True)
+print "Log file : /export/arequal.log"
+print "==============================TEST 6 ENDS=============================="
 

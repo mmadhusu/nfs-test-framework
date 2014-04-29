@@ -1,8 +1,8 @@
 #!/usr/bin/python
 import sys,getopt,threading
 from subprocess import call
-import setup,os,time
-from counter import counter
+import setup,os,time,check_tests,counter
+from print_results import print_results
 from usage import usage
 import header
 from mount import mount
@@ -13,6 +13,8 @@ lfile=""
 cleanup=""
 confile=""
 total=11
+nfs4_total=0
+nfs3_total=0
 known_failures=13
 version=""
 test_list=list()
@@ -20,9 +22,9 @@ test_list=list()
 
 argv=sys.argv[1:]
 try:
-        opts, args = getopt.getopt(argv,"hl:ns:v:c:tf:",["nocleanup"])
+        opts, args = getopt.getopt(argv,"hl:ns:v:c:t:f:",["nocleanup"])
 except getopt.GetoptError:
-        print 'main.py -s <SERVER-HOST-IP> -c <CLIENT-HOST-IP> -f <CONFIG_FILE> -l [LOG_FILE] -t [tests] -v [version][-n|--nocleanup] -'
+        print 'main.py -s <SERVER-HOST-IP> -c <CLIENT-HOST-IP> -f <CONFIG_FILE> -l [LOG_FILE] -t [TESTS] -v [NFS_VERSION][-n|--nocleanup] -'
         sys.exit(2)
 for opt, arg in opts:
         if opt == '-h':
@@ -43,9 +45,6 @@ for opt, arg in opts:
 		test_list.append(arg)
         elif opt == '-v':
                 version = arg
-                print "version "
-                print version
-
 
 
 class  Logger(object):
@@ -79,16 +78,15 @@ if lfile == "":
 sys.stdout = Logger()
 header.header_1(lfile)
 
-original = os.getcwd()
-#os.system('./copy.sh')
-#os.chdir('/tmp/working-scripts/')
-setup.setup("ganesha-test-volume",server_ip,client_ip,confile)
-
-#list = ["test1.py","test2.py","test3.py","test4.py","test5.py"]
-#list = ["test5.py"]
+test_list = check_tests.check_list(test_list, version);
 
 if not test_list:
-        test_list = ["test1.py"]
+        print "Nothing to be tested."
+        sys.exit(0)
+
+
+original = os.getcwd()
+setup.setup("ganesha-test-volume",server_ip,client_ip,confile)
 
 def run_tests(list):
         for test in list:
@@ -99,38 +97,54 @@ def run_tests(list):
                 thread1.start()
                 thread1.join()
 
-def check_list(test_list):
-        if "test3.py" in test_list:
-                test_list.remove("test3.py")
 
-if (version == "3" or version==""):
-        mount("ganesha-test-volume",server_ip,"3")
-        run_tests(test_list)
 if (version == "4" or version==""):
         call('umount /mnt/ganesha-mnt',shell=True)
         mount("ganesha-test-volume",server_ip,"4")
-        check_list(test_list)
+        if os.path.ismount('/mnt/ganesha-mnt') == False:
+                if version == "4":
+                        print "v4 mount failed,exiting."
+                        sys.exit(1)
+                else:
+                        print "v4 mount failed, skipping v4 tests"
+        else:
+                nfs4_total = len(test_list)
+                print "==============================Running v4 tests=============================="
+                counter.reset();
+                run_tests(test_list)
+                print_results(nfs4_total);
+if (version == "3" or version==""):
+        call('umount /mnt/ganesha-mnt',shell=True)
+        mount("ganesha-test-volume",server_ip,"3")
+        if os.path.ismount('/mnt/ganesha-mnt') == False:
+                print "v3 mount failed,exiting."
+                sys.exit(1)
+        if "test3.py" in test_list:
+                test_list.remove("test3.py")
+        nfs3_total = len(test_list)
+        print "==============================Running v3 tests=============================="
+        counter.reset();
         run_tests(test_list)
+        print_results(nfs3_total);
 
 
 
-
-passed=counter(0)
+#passed=counter(0)
 os.chdir(original)
 os.environ['server_ip']=server_ip
 if cleanup == "":
 	setup.clean()
-	os.system('ssh -t $server_ip "yes | /root/copy-to-server/cleanup.sh" ')
+	os.system('ssh -t $server_ip "yes | /tmp/copy-to-server/cleanup.sh" ')
 
 os.system('rm -rf /tmp/counter.txt')
 
-failed = total - passed
+#failed = total - passed
 
-print ""
-print "==============================Results===================================="
-print " Total tests run : %d  " %total
-print " Tests passed    : %d  " %passed
-print " Tests failed    : %d  " %failed
-print "========================================================================="
+#print ""
+#print "==============================Results===================================="
+#print " Total tests run : %d  " %total
+#print " Tests passed    : %d  " %passed
+#print " Tests failed    : %d  " %failed
+#print "========================================================================="
 
 
