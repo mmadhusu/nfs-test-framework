@@ -21,10 +21,10 @@ confile=sys.argv[3]
 known_failures = int (sys.argv[4])
 print "known_failures"
 print known_failures
-setup.setup("pynfs-test-volume",server_ip,client_ip,confile)
-mount("pynfs-test-volume",server_ip,"4")
-if os.path.ismount('/mnt/pynfs-mnt') == True:
-        time.sleep(30)
+#setup.setup("pynfs-test-volume",server_ip,client_ip,confile)
+#mount("pynfs-test-volume",server_ip,"4")
+if os.path.ismount('/mnt/ganesha-mnt') == True:
+        #time.sleep(30)
         if os.path.isdir("pynfs")== True:
 	        call('rm -rf pynfs',shell=True)
         call(' git clone git://linux-nfs.org/~bfields/pynfs.git',shell=True)
@@ -35,7 +35,7 @@ if os.path.ismount('/mnt/pynfs-mnt') == True:
 
         os.environ['server_ip'] = server_ip
         time.sleep(45)
-        ret = call('./testserver.py  -v --outfile ~/pynfs.run.1 --maketree $server_ip:/pynfs-test-volume  --showomit --rundeps  all > /tmp/pynfs-results.log',shell=True)
+        ret = call('./testserver.py  -v --outfile ~/pynfs.run.1 --maketree $server_ip:/ganesha-test-volume  --showomit --rundeps  all > /tmp/pynfs-results.log',shell=True)
 
         if  ret:
 	        print "pynfs tests failed, check logfile for details"
