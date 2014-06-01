@@ -12,7 +12,7 @@ from compare import compare
 call('./run-qa.sh',shell=True)
 print "=============================TEST 17 BEGINS============================="
 call('time /opt/qa/tools/system_light/run.sh -w /mnt/ganesha-mnt -l /export/compile_kernel.log -t compile_kernel > /export/compile_kernel.log',shell=True)
-print "Log file : /export/syscall.log"
+print "Log file : /export/compile_kernel.log"
 ret=compare("Total 1 tests were successful","/export/compile_kernel.log")
 if ret == 1:
         print "Test 17: PASS"

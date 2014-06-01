@@ -13,7 +13,7 @@ call('./run-qa.sh',shell=True)
 print "=============================TEST 16 BEGINS============================="
 call('time /opt/qa/tools/system_light/run.sh -w /mnt/ganesha-mnt -l /export/syscall.log -t syscallbench > /export/syscall.log',shell=True)
 print "Log file : /export/syscall.log"
-ret=("Total 1 tests were successful","/export/syscall.log")
+ret=compare("Total 1 tests were successful","/export/syscall.log")
 if ret == 1:
         print "Test 16: PASS"
         counter(1)
