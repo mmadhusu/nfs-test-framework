@@ -6,7 +6,7 @@ import re
 f=[]
 f1=[]
 for file in glob.glob("test*.py"):
-        print file
+        #print file
         f.append(file)
 for test in f:
         f1.append(os.path.splitext(test)[0])
