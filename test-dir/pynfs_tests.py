@@ -3,6 +3,7 @@
 import subprocess,os,sys,counter,setup,time
 from subprocess import call
 log_file=sys.argv[5]
+sys.path.insert(0, '../')
 from mount import mount
 class  Logger(object):
         def __init__(self):
@@ -13,7 +14,7 @@ class  Logger(object):
                 self.terminal.write(message)
                 self.log.write(message)
 sys.stdout =  Logger()
-print "==============================TEST 3 : Pynfs tests BEGINS==============="
+print "============================== PYNFS TESTS BEGIN==============="
 
 server_ip=sys.argv[1]
 client_ip=sys.argv[2]
@@ -65,12 +66,12 @@ if os.path.ismount('/mnt/ganesha-mnt') == True:
                 new_failures = failures - known_failures
                 if new_failures > 0 :
 	                if total == "568" :
-		                print " Test 3 : FAIL "
-		                print "Check /tmp/pynfs-results.log for results"
+		                print "PYNFS TESTS                   : FAIL"
+			        print "Check /tmp/pynfs-results.log for results"
 
                 else:
-	                        print " Test 3 : PASS "
+	                        print "PYNFS TESTS                   : PASS"
 	                        counter.counter(1)
-                print "====================================TEST 3 ENDS=========================================="
+                print "====================================PYNFS TESTS END=========================================="
 else:
         print "Mount failed,skipping pynfs tests."

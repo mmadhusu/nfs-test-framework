@@ -1,8 +1,9 @@
 #!/usr/bin/python
 import sys,getopt,threading
 from subprocess import call
-import setup,os,time,check_tests,counter
+import gluster_setup,os,time,check_tests,counter
 from print_results import print_results
+from check_setup import check_setup
 from usage import usage
 import header
 from mount import mount
@@ -12,6 +13,7 @@ client_ip=""
 lfile=""
 cleanup=""
 confile=""
+fs=""
 total=11
 nfs4_total=0
 nfs3_total=0
@@ -22,9 +24,9 @@ test_list=list()
 
 argv=sys.argv[1:]
 try:
-        opts, args = getopt.getopt(argv,"hl:ns:v:c:t:f:",["nocleanup"])
+        opts, args = getopt.getopt(argv,"hl:ns:v:t:f:b:e:",["nocleanup"])
 except getopt.GetoptError:
-        print 'main.py -s <SERVER-HOST-IP> -c <CLIENT-HOST-IP> -f <CONFIG_FILE> -l [LOG_FILE] -t [TESTS] -v [NFS_VERSION][-n|--nocleanup] -'
+        print 'main.py -s <SERVER-HOST-IP> -e <EXPORT> -b <BACK-END-FILE-SYSTEM> -f <CONFIG_FILE> -l [LOG_FILE] -t [TESTS] -v [NFS_VERSION][-n|--nocleanup]'
         sys.exit(2)
 for opt, arg in opts:
         if opt == '-h':
@@ -37,14 +39,17 @@ for opt, arg in opts:
                 lfile = arg
         elif opt == '-s':
                 server_ip = arg
-	elif opt == '-c':
-		client_ip = arg
 	elif opt == '-f':
 		confile = arg
         elif opt == '-t':
 		test_list.append(arg)
         elif opt == '-v':
                 version = arg
+	elif opt == '-b':
+		fs = arg
+	elif opt == '-e':
+		export = arg
+		
 
 
 class  Logger(object):
@@ -66,9 +71,11 @@ class myThread (threading.Thread):
 	def run(self):
 		os.system(self.name)
 
-usage(client_ip)
 usage(server_ip)
 usage(confile)
+usage(fs)
+usage(export)
+check_setup(fs)
 
 if lfile == "":
 	lfile="/tmp/ganesha.log"
@@ -86,7 +93,7 @@ if not test_list:
 
 
 original = os.getcwd()
-setup.setup("ganesha-test-volume",server_ip,client_ip,confile)
+gluster_setup.setup(export,server_ip,client_ip,confile)
 
 def run_tests(list):
         for test in list:
@@ -100,7 +107,7 @@ def run_tests(list):
 
 if (version == "4" or version==""):
         call('umount /mnt/ganesha-mnt',shell=True)
-        mount("ganesha-test-volume",server_ip,"4")
+        mount(export,server_ip,"4")
         if os.path.ismount('/mnt/ganesha-mnt') == False:
                 if version == "4":
                         print "v4 mount failed,exiting."
@@ -115,7 +122,7 @@ if (version == "4" or version==""):
                 print_results(nfs4_total);
 if (version == "3" or version==""):
         call('umount /mnt/ganesha-mnt',shell=True)
-        mount("ganesha-test-volume",server_ip,"3")
+        mount(export,server_ip,"3")
         if os.path.ismount('/mnt/ganesha-mnt') == False:
                 print "v3 mount failed,exiting."
                 sys.exit(1)

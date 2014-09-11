@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import os,sys
+sys.path.insert(0, '../')
 from success import success
 from counter import  counter
 from logger import logger
@@ -18,7 +19,7 @@ class  Logger(object):
 
 #sys.stdout= Logger()
 logger(log_file)
-print "==============================TEST 2 BEGINS============================="
+print "==============================FILE TESTS BEGIN============================="
 
 #Unit test1: Creating files on the mountpoint;
 
@@ -101,11 +102,11 @@ test2_3()
 test2_4()
 
 if count == 4:
-        print "TEST 2 : PASS"
-        counter(1)
+        print "FILE TESTS                   : PASS"
+	counter(1)
 else:
-        print "Test 2 : FAILURE"
+	print "FILE TESTS                   : FAIL"
 
-print "==============================TEST 2 ENDS==============================="
+print "==============================FILE TESTS END==============================="
 
 

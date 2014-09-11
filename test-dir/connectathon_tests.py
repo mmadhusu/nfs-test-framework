@@ -3,6 +3,7 @@ import os,sys,subprocess
 from subprocess import call
 from counter import counter
 count=0
+sys.path.insert(0, '../')
 server_ip=sys.argv[2]
 log_file=sys.argv[1]
 logfile='/tmp/cthon-results.txt'
@@ -29,7 +30,7 @@ def compare(search_str):
 sys.stdout=Logger()
 
 
-print "==============================TEST 4 BEGINS============================="
+print "==============================CONNECTATHON TESTS BEGIN============================"
 cur=os.getcwd()
 call('git clone git://fedorapeople.org/~steved/cthon04',shell=True)
 call('yum -y install time',shell=True)
@@ -56,11 +57,11 @@ call('./server -s  -p /ganesha-test-volume -m /mnt/ganesha-mnt $server_ip >>$log
 compare("Special tests complete")
 
 if count == 4:
-	print "TEST 4 : PASS"
+	print "CONNECTATHON  TESTS           : PASS"
 	counter(1)
 else:
-	print "Test 4 : FAILURE"
-print "==============================TEST 4 ENDS============================="
+	print "CONNECTATHON TESTS            : FAIL"
+print "==============================CONNECTATHON TESTS END============================="
 
 
 

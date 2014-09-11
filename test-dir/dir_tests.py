@@ -3,6 +3,7 @@ import sys,time
 from success import success
 import os
 import shutil
+sys.path.insert(0, '../')
 from counter import counter
 from logger import logger
 
@@ -25,7 +26,7 @@ logger(log_file)
 #First testcase : Directory based tests
 
 #Unit test1 : Creating directories on the mount point;
-print "=============================TEST 1 BEGINS============================="
+print "=============================DIR TESTS BEGIN============================="
 def test1_1 ():
                 #message.header2("1.1",log_file)
                 try:
@@ -116,9 +117,9 @@ test1_3()
 test1_4()
 
 if count == 4:
-        print "TEST 1 : PASS"
+        print "DIR TESTS                   : PASS"
         counter(1)
 else:
-        print "Test 1 : FAILURE"
-print "==============================TEST 1 ENDS=============================="
+        print "DIR TESTS                   : FAIL"
+print "==============================DIR TESTS END=============================="
 

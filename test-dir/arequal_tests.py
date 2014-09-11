@@ -2,6 +2,7 @@
 from subprocess import call
 from logger import logger
 import sys
+sys.path.insert(0, '../')
 log_file=sys.argv[1]
 from counter import counter
 from compare import compare
@@ -9,15 +10,15 @@ from compare import compare
 
 logger(log_file)
 call('./run-qa.sh',shell=True)
-print "=============================TEST 6 BEGINS============================="
+print "=============================AREQUAL TESTS BEGIN============================="
 call('time /opt/qa/tools/system_light/run.sh -w /mnt/ganesha-mnt -l /export/arequal.log -t arequal > /export/arequal.log',shell=True)
 print "Log file : /export/arequal.log"
 ret=compare("Total 1 tests were successful","/export/arequal.log")
 if ret == 1:
-        print "Test 6: PASS"
+        print "AREQUAL TESTS                   : PASS"
         counter(1)
 else:
-        print "Test 6: FAIL"
+        print "AREQUAL TESTS                   : FAIL"
 
-print "==============================TEST 6 ENDS=============================="
+print "==============================AREQUAL TESTS END=============================="
 

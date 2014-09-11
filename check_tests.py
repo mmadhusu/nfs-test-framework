@@ -3,21 +3,15 @@ import os
 import glob
 import re
 
-f=[]
-f1=[]
-for file in glob.glob("test*.py"):
-        #print file
-        f.append(file)
-for test in f:
-        f1.append(os.path.splitext(test)[0])
-#print f1[0:]
-complete_test_list = sorted(f1, key = lambda x: int(x.split("test")[1]))
-complete_test_list = [test + '.py' for test in complete_test_list]
-
-
-
 
 def check_list(test_list, version):
+	complete_test_list=[]
+	os.chdir("./test-dir")
+	for file in glob.glob("*.py"):
+        	#print file
+        	complete_test_list.append(file)
+	os.chdir("..")
+	print complete_test_list[0:]
         if test_list:
                 test_list = [test + '.py' for test in test_list]
                 for test in test_list:

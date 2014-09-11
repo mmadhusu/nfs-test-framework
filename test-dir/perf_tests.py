@@ -3,6 +3,7 @@ import os,sys,subprocess
 from subprocess import call
 from counter import counter
 from logger import logger 
+sys.path.insert(0, '../')
 count=0
 server_ip=sys.argv[2]
 log_file=sys.argv[1]
@@ -38,7 +39,7 @@ def compare(search_str):
 logger(log_file)
 
 
-print "==============================TEST 5 BEGINS============================="
+print "==============================PERF TESTS BEGIN============================="
 os.environ['server_ip']=server_ip
 os.environ['logfile']=logfile
 
@@ -47,11 +48,11 @@ call(' ./perftest.sh /mnt/ganesha-mnt > $logfile ',shell=True)
 compare("FAILED")
 
 if count == 1:
-	print "TEST 5 : PASS"
+	print "PERF TESTS                   : PASS"
 	counter(1)
 else:
-	print "Test 5 : FAILURE"
-print "==============================TEST 5 ENDS============================="
+	print "PERF TESTS                   : FAIL"
+print "==============================PERF TESTS END============================="
 
 
 
