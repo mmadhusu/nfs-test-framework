@@ -5,12 +5,13 @@ import re
 
 
 def check_list(test_list, version):
+	current = os.getcwd()
 	complete_test_list=[]
-	os.chdir("./test-dir")
+	os.chdir("tests/test-dir")
 	for file in glob.glob("*.py"):
         	#print file
         	complete_test_list.append(file)
-	os.chdir("..")
+	os.chdir(current)
 	print complete_test_list[0:]
         if test_list:
                 test_list = [test + '.py' for test in test_list]

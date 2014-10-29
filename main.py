@@ -3,7 +3,7 @@ import sys,getopt,threading
 from subprocess import call
 import gluster_setup,os,time,check_tests,counter
 from print_results import print_results
-from check_setup import check_setup
+from tests.check_setup import check_setup
 from usage import usage
 import header
 from mount import mount
@@ -96,11 +96,12 @@ original = os.getcwd()
 gluster_setup.setup(export,server_ip,client_ip,confile)
 
 def run_tests(list):
+#        os.chdir("./test-dir")
         for test in list:
-	        if test == "test3.py":
-		        thread1 = myThread("python %s %s %s %s %d %s " %(test,server_ip,client_ip,confile,known_failures,lfile))
+	        if test == "pynfs_tests.py":
+		        thread1 = myThread("python %s %s %s %d %s " %('tests/test-dir/'+test,server_ip,export,known_failures,lfile))
 	        else:
-		        thread1 = myThread("python %s %s %s " %(test,lfile,server_ip))
+		        thread1 = myThread("python %s %s %s %s" %('tests/test-dir/'+test,lfile,server_ip,export))
                 thread1.start()
                 thread1.join()
 
@@ -126,8 +127,8 @@ if (version == "3" or version==""):
         if os.path.ismount('/mnt/ganesha-mnt') == False:
                 print "v3 mount failed,exiting."
                 sys.exit(1)
-        if "test3.py" in test_list:
-                test_list.remove("test3.py")
+        if "pynfs_tests.py" in test_list:
+                test_list.remove("pynfs_tests.py")
         nfs3_total = len(test_list)
         print "==============================Running v3 tests=============================="
         counter.reset();
@@ -139,19 +140,12 @@ if (version == "3" or version==""):
 #passed=counter(0)
 os.chdir(original)
 os.environ['server_ip']=server_ip
+os.environ['export']=export
 if cleanup == "":
-	setup.clean()
-	os.system('ssh -t $server_ip "yes | /tmp/copy-to-server/cleanup.sh" ')
+	gluster_setup.clean()
+	os.system('ssh -t $server_ip "yes | /tmp/copy-to-server/cleanup.sh  $export"  ')
 
 os.system('rm -rf /tmp/counter.txt')
 
-#failed = total - passed
-
-#print ""
-#print "==============================Results===================================="
-#print " Total tests run : %d  " %total
-#print " Tests passed    : %d  " %passed
-#print " Tests failed    : %d  " %failed
-#print "========================================================================="
 
 

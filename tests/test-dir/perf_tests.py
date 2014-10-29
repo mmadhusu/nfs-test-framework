@@ -1,13 +1,12 @@
 #!/usr/bin/python
 import os,sys,subprocess
 from subprocess import call
-from counter import counter
-from logger import logger 
-sys.path.insert(0, '../')
+from tests.counter import counter
+from tests.logger import logger 
 count=0
 server_ip=sys.argv[2]
 log_file=sys.argv[1]
-logfile='/tmp/perftest.txt'
+logfile='/export/perftest.log'
 
 class  Logger(object):
         def __init__(self):
@@ -44,7 +43,7 @@ os.environ['server_ip']=server_ip
 os.environ['logfile']=logfile
 
 #=========Running perf tests================#
-call(' ./perftest.sh /mnt/ganesha-mnt > $logfile ',shell=True)
+call(' .tests/perftest.sh /mnt/ganesha-mnt > $logfile ',shell=True)
 compare("FAILED")
 
 if count == 1:

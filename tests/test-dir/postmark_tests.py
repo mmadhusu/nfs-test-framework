@@ -1,17 +1,14 @@
 #!/usr/bin/python
 from subprocess import call
-from logger import logger
+from tests.logger import logger
 import sys
 log_file=sys.argv[1]
-from counter import counter
-from compare import compare
-sys.path.insert(0, '../')
+from tests.counter import counter
+from tests.compare import compare
 logger(log_file)
-from counter import counter
-from compare import compare
 
 
-call('./run-qa.sh',shell=True)
+call('tests/run-qa.sh',shell=True)
 print "=============================POSTMARK TESTS BEGIN============================="
 call('time /opt/qa/tools/system_light/run.sh -w /mnt -l /export/postmark.log -t postmark > /export/postmark.log',shell=True)
 print "Log file : /export/postmark.log"

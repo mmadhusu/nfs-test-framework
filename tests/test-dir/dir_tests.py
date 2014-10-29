@@ -3,9 +3,8 @@ import sys,time
 from success import success
 import os
 import shutil
-sys.path.insert(0, '../')
-from counter import counter
-from logger import logger
+from tests.counter import counter
+from tests.logger import logger
 
 
 log_file = sys.argv[1]

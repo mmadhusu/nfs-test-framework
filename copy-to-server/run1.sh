@@ -25,16 +25,9 @@ function write_conf()
 	kill -9 `cat /var/run/ganesha.pid`
 	sleep 10
 	fi
-	if [ "$1" == "ganesha-test-volume" ]
-	then
 	mkdir /tmp/brick98
 	mkdir /tmp/brick99
 	gluster volume create $1 $2:/tmp/brick98 $2:/tmp/brick99 force
-	else
-	mkdir /tmp/brick96
-	mkdir /tmp/brick97
-        gluster volume create $1 $2:/tmp/brick96 $2:/tmp/brick97 force
-	fi
 	gluster volume start $1
 	gluster volume set $1 nfs.disable ON
 

@@ -1,9 +1,8 @@
 #!/usr/bin/python
 import os,sys
-sys.path.insert(0, '../')
-from success import success
-from counter import  counter
-from logger import logger
+from tests.success import success
+from tests.counter import  counter
+from tests.logger import logger
 
 count =0
 log_file=sys.argv[1]

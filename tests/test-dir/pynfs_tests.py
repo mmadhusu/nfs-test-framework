@@ -3,7 +3,7 @@
 import subprocess,os,sys,counter,setup,time
 from subprocess import call
 log_file=sys.argv[5]
-sys.path.insert(0, '../')
+export=sys.argv[3]
 from mount import mount
 class  Logger(object):
         def __init__(self):
@@ -36,7 +36,7 @@ if os.path.ismount('/mnt/ganesha-mnt') == True:
 
         os.environ['server_ip'] = server_ip
         time.sleep(45)
-        ret = call('./testserver.py  -v --outfile ~/pynfs.run.1 --maketree $server_ip:/ganesha-test-volume  --showomit --rundeps  all > /tmp/pynfs-results.log',shell=True)
+        ret = call('./testserver.py  -v --outfile ~/pynfs.run.1 --maketree $server_ip:/$export  --showomit --rundeps  all > /export/pynfs-results.log',shell=True)
 
         if  ret:
 	        print "pynfs tests failed, check logfile for details"
@@ -44,16 +44,16 @@ if os.path.ismount('/mnt/ganesha-mnt') == True:
 	        print "==============================TEST 3 ENDS================================="
 	else:
                 os.chdir(cur)
-                os.system('cat /tmp/pynfs-results.log| grep "Command" | cut -d " " -f5 > /tmp/pynfs-log.txt')
-                fo = open ('/tmp/pynfs-log.txt','r')
+                os.system('cat /export/pynfs-results.log| grep "Command" | cut -d " " -f5 > /export/pynfs-log.txt')
+                fo = open ('/export/pynfs-log.txt','r')
                 total = int( fo.read())
                 fo.close()
-                os.system('cat /tmp/pynfs-results.log| grep "Of those" | cut -d " " -f5 > /tmp/pynfs-log.txt')
-                fo = open ('/tmp/pynfs-log.txt','r')
+                os.system('cat /export/pynfs-results.log| grep "Of those" | cut -d " " -f5 > /export/pynfs-log.txt')
+                fo = open ('/export/pynfs-log.txt','r')
                 failures=int(fo.read())
                 fo.close()
-                os.system('cat /tmp/pynfs-results.log| grep "Of those" | cut -d " " -f9 > /tmp/pynfs-log.txt')
-                fo = open ('/tmp/pynfs-log.txt','r')
+                os.system('cat /export/pynfs-results.log| grep "Of those" | cut -d " " -f9 > /export/pynfs-log.txt')
+                fo = open ('/export/pynfs-log.txt','r')
                 passed=int(fo.read())
                 fo.close()
 
@@ -67,7 +67,7 @@ if os.path.ismount('/mnt/ganesha-mnt') == True:
                 if new_failures > 0 :
 	                if total == "568" :
 		                print "PYNFS TESTS                   : FAIL"
-			        print "Check /tmp/pynfs-results.log for results"
+			        print "Check /export/pynfs-results.log for results"
 
                 else:
 	                        print "PYNFS TESTS                   : PASS"

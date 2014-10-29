@@ -3,10 +3,10 @@ import os,sys,subprocess
 from subprocess import call
 from counter import counter
 count=0
-sys.path.insert(0, '../')
 server_ip=sys.argv[2]
 log_file=sys.argv[1]
-logfile='/tmp/cthon-results.txt'
+export=sys.argv[3]
+logfile='/export/cthon-results.log'
 
 class  Logger(object):
         def __init__(self):
@@ -41,19 +41,19 @@ os.environ['logfile']=logfile
 
 #=========Running cthon basic tests================#
 print "Running cthon basic tests"
-call(' ./server -b  -p /ganesha-test-volume -m /mnt/ganesha-mnt $server_ip  > $logfile ',shell=True)
+call(' ./server -b  -p /$export -m /mnt/ganesha-mnt $server_ip  > $logfile ',shell=True)
 compare("Congratulations, you passed the basic tests!")
 #===========Running cthon general tests============#
 print"Running cthon general tests"
-call('./server -g  -p /ganesha-test-volume -m /mnt/ganesha-mnt  $server_ip >> $logfile',shell=True)
+call('./server -g  -p /$export -m /mnt/ganesha-mnt  $server_ip >> $logfile',shell=True)
 compare("General tests complete")
 #===========Running cthon lock tests===============#
 print"Running cthon lock tests"
-call('./server -l  -p /ganesha-test-volume -m /mnt/ganesha-mnt $server_ip >> $logfile ', shell=True)
+call('./server -l  -p /$export -m /mnt/ganesha-mnt $server_ip >> $logfile ', shell=True)
 compare("Congratulations, you passed the locking tests!")
 #===========Running cthon special tests============#
 print"Running cthon special tests"
-call('./server -s  -p /ganesha-test-volume -m /mnt/ganesha-mnt $server_ip >>$logfile ', shell=True)
+call('./server -s  -p /$export -m /mnt/ganesha-mnt $server_ip >>$logfile ', shell=True)
 compare("Special tests complete")
 
 if count == 4:
