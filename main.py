@@ -1,12 +1,15 @@
 #!/usr/bin/python
 import sys,getopt,threading
 from subprocess import call
-import gluster_setup,os,time,check_tests,counter
-from print_results import print_results
+from tests.gluster_setup import setup, clean
+import os, time
+from tests.counter import counter, reset
+from tests.check_tests import check_list
+from tests.print_results import print_results
 from tests.check_setup import check_setup
 from usage import usage
-import header
-from mount import mount
+from tests.mount import mount
+from tests.header import header_1
 
 server_ip=""
 client_ip=""
@@ -21,6 +24,19 @@ known_failures=13
 version=""
 test_list=list()
 
+if os.getcwd() not in sys.path:
+    sys.path.append(os.getcwd())
+
+original = os.getcwd()
+os.environ["PYTHONPATH"] = original
+
+ret = os.system("rpm -qa | grep perl-Test-Harness")
+if ret != 0:
+    os.system("yum install -y perl-Test-Harness")
+
+#ret = os.system("rpm -qa | grep sshpass")
+#if ret != 0:
+#    os.system("yum install -y sshpass")
 
 argv=sys.argv[1:]
 try:
@@ -49,7 +65,6 @@ for opt, arg in opts:
 		fs = arg
 	elif opt == '-e':
 		export = arg
-		
 
 
 class  Logger(object):
@@ -83,21 +98,22 @@ if lfile == "":
 		os.remove(lfile)
 
 sys.stdout = Logger()
-header.header_1(lfile)
+header_1(lfile)
 
-test_list = check_tests.check_list(test_list, version);
+test_list = check_list(test_list, version)
 
 if not test_list:
         print "Nothing to be tested."
         sys.exit(0)
 
 
-original = os.getcwd()
-gluster_setup.setup(export,server_ip,client_ip,confile)
+#original = os.getcwd()
+setup(export,server_ip,client_ip,confile)
 
 def run_tests(list):
 #        os.chdir("./test-dir")
         for test in list:
+		print test
 	        if test == "pynfs_tests.py":
 		        thread1 = myThread("python %s %s %s %d %s " %('tests/test-dir/'+test,server_ip,export,known_failures,lfile))
 	        else:
@@ -118,7 +134,7 @@ if (version == "4" or version==""):
         else:
                 nfs4_total = len(test_list)
                 print "==============================Running v4 tests=============================="
-                counter.reset();
+                reset();
                 run_tests(test_list)
                 print_results(nfs4_total);
 if (version == "3" or version==""):
@@ -131,7 +147,7 @@ if (version == "3" or version==""):
                 test_list.remove("pynfs_tests.py")
         nfs3_total = len(test_list)
         print "==============================Running v3 tests=============================="
-        counter.reset();
+        reset();
         run_tests(test_list)
         print_results(nfs3_total);
 
@@ -142,7 +158,7 @@ os.chdir(original)
 os.environ['server_ip']=server_ip
 os.environ['export']=export
 if cleanup == "":
-	gluster_setup.clean()
+	clean()
 	os.system('ssh -t $server_ip "yes | /tmp/copy-to-server/cleanup.sh  $export"  ')
 
 os.system('rm -rf /tmp/counter.txt')

@@ -12,4 +12,3 @@ def  logger(log_file):
                         self.log.write(message)
 
         sys.stdout = Logger()
-

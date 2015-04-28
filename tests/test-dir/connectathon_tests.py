@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import os,sys,subprocess
 from subprocess import call
-from counter import counter
+from tests.counter import counter
 count=0
 server_ip=sys.argv[2]
 log_file=sys.argv[1]

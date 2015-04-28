@@ -11,7 +11,7 @@ from tests.compare import compare
 
 call('tests/run-qa.sh',shell=True)
 print "=============================DD TESTS BEGIN============================="
-ocall('time /opt/qa/tools/system_light/run.sh -w /mnt/ganesha-mnt -l /export/dd.log -t dd > /export/dd.log',shell=True)
+call('time /opt/qa/tools/system_light/run.sh -w /mnt/ganesha-mnt -l /export/dd.log -t dd > /export/dd.log',shell=True)
 print "Log file : /export/dd.log"
 ret=compare("Total 1 tests were successful","/export/dd.log")
 if ret == 1:

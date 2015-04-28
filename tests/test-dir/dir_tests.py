@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import sys,time
-from success import success
+from tests.success import success
 import os
 import shutil
 from tests.counter import counter

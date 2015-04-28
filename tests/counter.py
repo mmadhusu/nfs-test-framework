@@ -18,7 +18,7 @@ def counter(count):
 	fo = open('/tmp/counter.txt','w')
 	fo.write("%s"%num1)
 	fo.close()
-	return num;
+	return num
 
 def reset():
 	fo = open('/tmp/counter.txt','w')
@@ -31,6 +31,4 @@ def get_value():
 	str1=fo.read()
 	fo.close()
 	num=int(str1)
-	return num;
-	
-	
+	return num

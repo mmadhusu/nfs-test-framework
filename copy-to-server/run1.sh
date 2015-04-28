@@ -12,10 +12,9 @@ function write_conf()
         echo "Access_type = RW;"
         echo "Squash = No_root_squash;"
         echo "Pseudo=\"/$1\";"
-        echo "Protocols = \"3,4\" ;"
-        echo "Transports = \"UDP,TCP\" ;"
+        echo "Protocols = \"3\",\"4\" ;"
+        echo "Transports = \"UDP\",\"TCP\" ;"
         echo "SecType = \"sys\";"
-        echo "Tag = \"$1\";"
         echo "}"
 }
 
@@ -52,5 +51,5 @@ function write_conf()
         sed -i /conf/d  $3
         echo "%include \"/tmp/export_gluster.conf\"" >> $3
 
-	/usr/local/bin/ganesha.nfsd -f $3  -L  ./nfs-ganesha.log -N NIV_NULL -d 
+	/usr/bin/ganesha.nfsd -f $3  -L  ./nfs-ganesha.log -N NIV_NULL  
 	sleep 3

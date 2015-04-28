@@ -7,7 +7,7 @@ logger(log_file)
 from tests.counter import counter
 from tests.compare import compare
 
-call('.tests/run-qa.sh',shell=True)
+call('tests/run-qa.sh',shell=True)
 print "=============================FSX TESTS BEGIN============================="
 call('time /opt/qa/tools/system_light/run.sh -w /mnt/ganesha-mnt -l /export/fsx.log -t fsx > /export/fsx.log',shell=True)
 print "Log file : /export/fsx.log"

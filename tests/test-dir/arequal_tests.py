@@ -7,7 +7,7 @@ from tests.compare import compare
 from tests.logger import logger
 
 logger(log_file)
-call('.tests/run-qa.sh',shell=True)
+call('tests/run-qa.sh',shell=True)
 print "=============================AREQUAL TESTS BEGIN============================="
 call('time /opt/qa/tools/system_light/run.sh -w /mnt/ganesha-mnt -l /export/arequal.log -t arequal > /export/arequal.log',shell=True)
 print "Log file : /export/arequal.log"
